@@ -245,3 +245,121 @@
 
 
 
+# Задача 16: Функция с kwargs для вывода информации
+from tkinter.font import names
+from unittest import removeResult
+
+print("Задача 16: Функция с **kwargs для вывода информации")
+def show_info(**kwargs):
+    for key, val in kwargs.items():
+        print(f"{key}: {val}")
+
+show_info(name='Алиса', age=20, city='Алматы')
+
+
+# Задача 17: Декоратор для добавления суффикса
+print("\nЗадача 17: Декоратор для добавления суффикса")
+def add_suffix(func):
+    def wrapper(text):
+        result = func(text)
+        result += " ✓"
+        return result
+    return wrapper
+
+@add_suffix
+def status(text):
+    return text
+
+print(status('Ready'))
+print(status('Complete'))
+
+
+# Задача 18: Функция для проверки палиндрома (числа)
+print("\nЗадача 18: Функция для проверки палиндрома (числа)")
+
+def is_palindrome_number(num):
+    num_str = str(num)
+    num_str_revers = num_str[::-1]
+    if num_str == num_str_revers:
+        return True
+    else:
+        return False
+
+print(is_palindrome_number(121))
+print(is_palindrome_number(12321))
+print(is_palindrome_number(123))
+print(is_palindrome_number(1))
+
+
+# Задача 19: Комплексный декоратор с логированием
+print("\nЗадача 19: Комплексный декоратор с логированием")
+def logger(func):
+    def wrapper(*args):
+        name = func.__name__
+        result = func(*args)
+        print("Вывод:")
+        print(f"[LOG] Функция: {name}, Аргументы: {args}, Результат: {result}")
+        print(f"Результат: {result}\n")
+        return result
+    return wrapper
+
+@logger
+def add(a, b):
+    return a + b
+
+add(5, 3)
+
+@logger
+def greet(name):
+    return f"Hello, {name}!"
+
+greet("Alice")
+
+
+# Задача 20: Функция-калькулятор с валидацией и args/*kwargs
+print("\nЗадача 20: Функция-калькулятор с валидацией и args/*kwargs")
+
+def calculator(*numbers, **operations):
+    operators = operations.keys()
+    suff = ""
+    if "round" in operators:
+        numbers_new = []
+        for num in numbers:
+            num = float(num)
+
+            numbers_new.append(round(num, operations["round"]))
+        numbers = numbers_new
+        suff = f"Округлено до {operations["round"]} знака"
+    if "sum" in operators:
+        summ_nums = 0
+        for num in numbers:
+            summ_nums += num
+        print(f"Сумма: {summ_nums} {suff}")
+    if "multiply" in operators:
+        multiply_nums = 1
+        for num in numbers:
+            multiply_nums *= num
+        print(f"Произведение: {multiply_nums} {suff}")
+    if "power" in operators:
+        result = numbers[0]  operations["power"]
+        print(f"{numbers[0]} в степени {operations["power"]} = {result} {suff}")
+
+try:
+    calculator(2, 3, 4, sum=True)
+except TypeError as e:
+    print("Вы ввели неизвестную математическую операцию")
+
+try:
+    calculator(2, 3, 4, multiply=True)
+except TypeError as e:
+    print("Вы ввели неизвестную математическую операцию")
+
+try:
+    calculator(2, 3, 4, sum=True, round=1)
+except TypeError as e:
+    print("Вы ввели неизвестную математическую операцию")
+
+try:
+    calculator(2, power=3)
+except TypeError as e:
+    print("Вы ввели неизвестную математическую операцию")
